@@ -6,6 +6,10 @@ Transcribes audio files to text.
 import os
 import whisper
 
+# Set Whisper cache directory to persist across builds
+# This prevents re-downloading the model on each deploy
+os.environ.setdefault("XDG_CACHE_HOME", "/app/.cache")
+
 # Load model once at module level for efficiency
 _model = None
 
@@ -14,7 +18,9 @@ def get_model(model_name: str = "base"):
     global _model
     if _model is None:
         print(f"[TRANSCRIPTION] Loading Whisper model: {model_name}")
+        print(f"[TRANSCRIPTION] Cache dir: {os.environ.get('XDG_CACHE_HOME', 'default')}")
         _model = whisper.load_model(model_name)
+        print(f"[TRANSCRIPTION] Model loaded successfully")
     return _model
 
 

@@ -1,0 +1,12 @@
+# Nixpacks configuration for Railway
+[phases.setup]
+nixPkgs = ["ffmpeg"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[phases.build]
+cmds = ["python -c \"import whisper; whisper.load_model('base')\""]
+
+[start]
+cmd = "gunicorn app:app --timeout 300 --workers 1 --bind 0.0.0.0:$PORT --preload"
