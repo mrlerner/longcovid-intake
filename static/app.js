@@ -45,6 +45,7 @@ const elements = {
     questionText: document.getElementById('question-text'),
     recordingPreview: document.getElementById('recording-preview'),
     playbackVideo: document.getElementById('playback-video'),
+    videoPlayButton: document.getElementById('video-play-button'),
     recordingIndicator: document.getElementById('recording-indicator'),
     recordingTimer: document.getElementById('recording-timer'),
 
@@ -78,6 +79,13 @@ function setupEventListeners() {
     elements.stopRecordingBtn.addEventListener('click', handleStopRecording);
     elements.rerecordBtn.addEventListener('click', handleRerecord);
     elements.continueBtn.addEventListener('click', handleContinue);
+    
+    // Video playback controls
+    elements.videoPlayButton.addEventListener('click', handleVideoPlayPause);
+    elements.playbackVideo.addEventListener('click', handleVideoPlayPause);
+    elements.playbackVideo.addEventListener('play', handleVideoPlay);
+    elements.playbackVideo.addEventListener('pause', handleVideoPause);
+    elements.playbackVideo.addEventListener('ended', handleVideoPause);
 }
 
 // Screen Navigation
@@ -198,6 +206,7 @@ function updateQuestionDisplay() {
     // Show live preview
     elements.recordingPreview.classList.remove('hidden');
     elements.playbackVideo.classList.add('hidden');
+    elements.videoPlayButton.classList.add('hidden');
 }
 
 function showControls(mode) {
@@ -244,6 +253,9 @@ function handleStartRecording() {
         elements.playbackVideo.src = url;
         elements.playbackVideo.classList.remove('hidden');
         elements.recordingPreview.classList.add('hidden');
+        
+        // Show play button (video starts paused)
+        elements.videoPlayButton.classList.remove('hidden');
 
         showControls('post-record');
     };
@@ -283,11 +295,32 @@ function handleRerecord() {
     // Clear recorded blob
     delete state.recordedBlobs[state.currentQuestion];
 
-    // Show live preview
+    // Pause and hide playback video
+    elements.playbackVideo.pause();
     elements.playbackVideo.classList.add('hidden');
+    elements.videoPlayButton.classList.add('hidden');
+    
+    // Show live preview
     elements.recordingPreview.classList.remove('hidden');
 
     showControls('pre-record');
+}
+
+// Video playback handlers
+function handleVideoPlayPause() {
+    if (elements.playbackVideo.paused) {
+        elements.playbackVideo.play();
+    } else {
+        elements.playbackVideo.pause();
+    }
+}
+
+function handleVideoPlay() {
+    elements.videoPlayButton.classList.add('hidden');
+}
+
+function handleVideoPause() {
+    elements.videoPlayButton.classList.remove('hidden');
 }
 
 async function handleContinue() {

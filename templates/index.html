@@ -95,20 +95,6 @@
             <!-- Question Screen -->
             <section id="question-screen" class="screen">
                 <div class="question-container">
-                    <!-- Progress Bar -->
-                    <div class="progress-bar">
-                        <div class="progress-steps">
-                            <div class="step" data-step="1"><span>1</span></div>
-                            {% if not test_mode %}
-                            <div class="step" data-step="2"><span>2</span></div>
-                            <div class="step" data-step="3"><span>3</span></div>
-                            {% endif %}
-                        </div>
-                        <div class="progress-line">
-                            <div class="progress-fill" id="progress-fill"></div>
-                        </div>
-                    </div>
-
                     <!-- Question Display -->
                     <div class="question-display">
                         <div class="question-number">Question <span id="current-question-num">1</span> of <span id="total-questions">{% if test_mode %}1{% else %}3{% endif %}</span></div>
@@ -162,6 +148,14 @@
                     <div class="video-container recording">
                         <video id="recording-preview" autoplay muted playsinline></video>
                         <video id="playback-video" playsinline class="hidden"></video>
+
+                        <!-- Play button overlay for playback -->
+                        <button id="video-play-button" class="video-play-button hidden" aria-label="Play video">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                                <circle cx="32" cy="32" r="32" fill="rgba(0, 0, 0, 0.6)"/>
+                                <path d="M26 20l20 12-20 12V20z" fill="white"/>
+                            </svg>
+                        </button>
 
                         <!-- Recording indicator -->
                         <div id="recording-indicator" class="recording-indicator hidden">

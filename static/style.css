@@ -1,25 +1,28 @@
 /* Long-COVID Clinic Video Intake - Styles */
 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --primary-light: #dbeafe;
+    --primary: #4b2e83;
+    --primary-dark: #3a2368;
+    --primary-light: #e8e3f3;
+    --secondary: #b7a57a;
     --success: #16a34a;
     --success-light: #dcfce7;
     --error: #dc2626;
     --error-light: #fee2e2;
     --warning: #ca8a04;
     --warning-light: #fef9c3;
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #e5e5e5;
+    --gray-300: #d4d4d4;
+    --gray-400: #a3a3a3;
+    --gray-500: #737373;
+    --gray-600: #525252;
+    --gray-700: #404040;
+    --gray-800: #262626;
+    --gray-900: #171717;
     --recording: #ef4444;
 }
 
@@ -30,8 +33,8 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--gray-50);
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    background: #ffffff;
     color: var(--gray-800);
     line-height: 1.6;
     min-height: 100vh;
@@ -45,9 +48,10 @@ body {
 
 /* Header */
 .header {
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--gray-200);
+    padding: 1.5rem 0;
+    border-bottom: 3px solid var(--primary);
     background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .logo {
@@ -55,13 +59,15 @@ body {
     align-items: center;
     gap: 0.75rem;
     color: var(--primary);
-    font-weight: 600;
-    font-size: 1.125rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
 }
 
 /* Main Content */
 .main {
-    padding: 2rem 0 4rem;
+    padding: 3rem 0 4rem;
+    background: #ffffff;
 }
 
 /* Screens */
@@ -87,32 +93,36 @@ body {
 }
 
 .welcome-content h1 {
-    font-size: 2rem;
+    font-size: 2.25rem;
     font-weight: 700;
-    color: var(--gray-900);
-    margin-bottom: 0.75rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
 }
 
 .subtitle {
     font-size: 1.125rem;
-    color: var(--gray-600);
-    margin-bottom: 2rem;
-}
-
-.info-box {
-    background: white;
-    border: 1px solid var(--gray-200);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    color: var(--gray-700);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
     text-align: left;
 }
 
+.info-box {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    border-left: 4px solid var(--primary);
+}
+
 .info-box h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--gray-800);
-    margin-bottom: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
 }
 
 .info-box ul {
@@ -121,13 +131,14 @@ body {
 }
 
 .info-box li {
-    color: var(--gray-600);
-    margin-bottom: 0.5rem;
+    color: var(--gray-700);
+    margin-bottom: 0.625rem;
+    line-height: 1.6;
 }
 
 .info-box.warning {
-    background: var(--warning-light);
-    border-color: transparent;
+    background: #fffef7;
+    border-left-color: var(--secondary);
 }
 
 /* Buttons */
@@ -136,13 +147,15 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 1.75rem;
     font-size: 1rem;
-    font-weight: 500;
-    border-radius: 8px;
+    font-weight: 600;
+    border-radius: 4px;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.01em;
 }
 
 .btn:disabled {
@@ -153,25 +166,28 @@ body {
 .btn-primary {
     background: var(--primary);
     color: white;
+    box-shadow: 0 2px 4px rgba(75, 46, 131, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
     background: var(--primary-dark);
+    box-shadow: 0 4px 6px rgba(75, 46, 131, 0.25);
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
     background: white;
-    color: var(--gray-700);
-    border: 1px solid var(--gray-300);
+    color: var(--primary);
+    border: 2px solid var(--primary);
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background: var(--gray-50);
-    border-color: var(--gray-400);
+    background: var(--primary-light);
+    border-color: var(--primary-dark);
 }
 
 .btn-large {
-    padding: 1rem 2rem;
+    padding: 1.125rem 2.25rem;
     font-size: 1.125rem;
 }
 
@@ -203,22 +219,27 @@ body {
 }
 
 .camera-setup h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
 }
 
 .camera-setup > p {
-    color: var(--gray-600);
-    margin-bottom: 1.5rem;
+    color: var(--gray-700);
+    margin-bottom: 2rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
 }
 
 .video-container {
     position: relative;
     background: var(--gray-900);
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
     aspect-ratio: 16/9;
     margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .video-container video {
@@ -267,21 +288,29 @@ body {
 }
 
 .camera-ready, .camera-error {
-    padding: 1.5rem;
-    border-radius: 12px;
+    padding: 2rem;
+    border-radius: 8px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
 }
 
 .camera-ready {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--success);
+}
+
+.camera-error {
+    border-left: 4px solid var(--error);
 }
 
 .success-message, .error-message {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    font-weight: 500;
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    font-size: 1.0625rem;
 }
 
 .success-message {
@@ -372,30 +401,32 @@ body {
 /* Question Display */
 .question-display {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .question-number {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--primary);
+    font-weight: 600;
+    color: var(--secondary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
 }
 
 .question-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: var(--gray-900);
-    margin-bottom: 0.75rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    line-height: 1.3;
 }
 
 .question-text {
     font-size: 1.125rem;
-    color: var(--gray-600);
-    max-width: 550px;
+    color: var(--gray-700);
+    max-width: 600px;
     margin: 0 auto;
+    line-height: 1.7;
 }
 
 /* Video Container for Recording */
@@ -405,6 +436,35 @@ body {
 
 .video-container.recording video {
     transform: scaleX(-1);
+}
+
+/* Video Play Button */
+.video-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    padding: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0.9;
+}
+
+.video-play-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+}
+
+.video-play-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.video-play-button svg {
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 /* Recording Indicator */
@@ -452,19 +512,21 @@ body {
 }
 
 .control-group {
-    padding: 1.5rem;
-    background: white;
-    border-radius: 12px;
+    padding: 2rem;
+    background: var(--gray-50);
+    border-radius: 8px;
     border: 1px solid var(--gray-200);
 }
 
 .tip {
-    color: var(--gray-600);
-    margin-bottom: 1rem;
+    color: var(--gray-700);
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
 .tip.recording-tip {
-    color: var(--gray-500);
+    color: var(--gray-600);
 }
 
 .button-group {
@@ -481,20 +543,24 @@ body {
 }
 
 .processing-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
 }
 
 .processing-content > p {
-    color: var(--gray-600);
-    margin-bottom: 2rem;
+    color: var(--gray-700);
+    margin-bottom: 2.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
 }
 
 .processing-steps {
-    background: white;
+    background: var(--gray-50);
     border: 1px solid var(--gray-200);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 2rem;
 }
 
 .processing-step {
@@ -571,30 +637,33 @@ body {
 
 .complete-content h2 {
     text-align: center;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
 }
 
 .complete-content > .subtitle {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .summary-section {
-    background: white;
+    background: var(--gray-50);
     border: 1px solid var(--gray-200);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 2rem;
     margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary);
 }
 
 .summary-section h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--gray-800);
-    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.25rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--gray-100);
+    border-bottom: 2px solid var(--gray-200);
 }
 
 .transcription-item {
@@ -655,20 +724,22 @@ body {
 
 .next-steps {
     background: var(--primary-light);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 2rem;
+    border-left: 4px solid var(--primary);
 }
 
 .next-steps h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
 }
 
 .next-steps p {
-    color: var(--gray-700);
-    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
 }
 
 .next-steps p:last-child {

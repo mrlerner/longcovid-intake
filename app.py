@@ -12,6 +12,12 @@ app.secret_key = Config.SECRET_KEY
 # Ensure upload folder exists
 os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
 
+# Preload Whisper model at startup to avoid timeout on first request
+print("[STARTUP] Preloading Whisper model...")
+from services.transcription import get_model
+get_model("base")
+print("[STARTUP] Whisper model loaded successfully")
+
 # In-memory session storage (in production: use Redis or database)
 patient_sessions = {}
 

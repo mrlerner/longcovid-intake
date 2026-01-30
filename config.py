@@ -19,19 +19,19 @@ class Config:
         {
             "id": 1,
             "title": "Your Main Concerns",
-            "text": "What are the top three things you'd most like help with right now? Please describe the symptoms or problems that matter most to you today.",
+            "text": "What are the top three symptoms you'd most like help with today?",
             "suggested_duration": 60
         },
         {
             "id": 2,
             "title": "Timeline",
-            "text": "How long have you been experiencing these symptoms? You can give an approximate timeline (for example: weeks, months, or since a specific illness or date).",
+            "text": "How long have you had these symptoms, and are they getting worse, improving, or staying about the same?",
             "suggested_duration": 45
         },
         {
             "id": 3,
             "title": "Daily Impact",
-            "text": "How are these symptoms affecting your day-to-day life right now? Tell us what you struggle to do or can no longer do—such as work or school, physical activity, sleep, thinking or memory, or emotional well-being.",
+            "text": "How are these symptoms affecting your day-to-day life right now? Tell us what you struggle to do or can no longer do—such as work or school, physical activity, or sleep.",
             "suggested_duration": 60
         }
     ]
