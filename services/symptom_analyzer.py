@@ -29,10 +29,14 @@ def analyze_symptoms(transcriptions: dict, api_key: str, model: str = "claude-so
     # Format symptom categories for the prompt
     categories_text = ""
     if symptom_categories:
+        print(f"[ANALYZER DEBUG] Received {len(symptom_categories)} symptom categories")
         categories_text = "\n## Available Symptom Categories\n\n"
         for cat in symptom_categories:
             categories_text += f"- **{cat['name']}** (ID: {cat['id']})\n"
             categories_text += f"  {cat['description']}\n\n"
+        print(f"[ANALYZER DEBUG] Categories text length: {len(categories_text)} chars")
+    else:
+        print("[ANALYZER DEBUG] WARNING: No symptom categories provided!")
 
     # Build analysis prompt
     analysis_prompt = f"""You are a medical intake analyst for a Long-COVID clinic. Analyze these patient responses and extract structured information about their symptoms.
@@ -40,6 +44,13 @@ def analyze_symptoms(transcriptions: dict, api_key: str, model: str = "claude-so
 {categories_text}
 
 ## Patient Responses
+
+### TRANSCRIPTION RECEIVED:
+Question 1: {transcriptions.get(1, '[No response recorded]')}
+
+---
+
+## Patient Interview Responses
 
 ### Question 1: Main Concerns
 "What are the top three things you'd most like help with right now?"
@@ -88,6 +99,9 @@ You MUST return ONLY valid JSON in this EXACT format (no markdown code blocks, n
 IMPORTANT: Return ONLY the JSON object. No other text before or after."""
 
     # Send to Claude for analysis
+    print(f"[ANALYZER DEBUG] Sending prompt to Claude (length: {len(analysis_prompt)} chars)")
+    print(f"[ANALYZER DEBUG] First 300 chars of prompt: {analysis_prompt[:300]}")
+    
     message = client.messages.create(
         model=model,
         max_tokens=2048,
@@ -98,9 +112,12 @@ IMPORTANT: Return ONLY the JSON object. No other text before or after."""
             }
         ]
     )
+    
+    print(f"[ANALYZER DEBUG] Claude responded successfully")
 
     # Parse JSON response
     response_text = message.content[0].text.strip()
+    print(f"[CLAUDE DEBUG] Raw response (first 500 chars): {response_text[:500]}")
 
     # Try to extract JSON if wrapped in markdown
     if response_text.startswith('```'):
@@ -116,9 +133,15 @@ IMPORTANT: Return ONLY the JSON object. No other text before or after."""
             elif in_json:
                 json_lines.append(line)
         response_text = '\n'.join(json_lines)
+        print(f"[CLAUDE DEBUG] Extracted from markdown: {response_text[:500]}")
 
     try:
         analysis = json.loads(response_text)
+        print(f"[CLAUDE DEBUG] Parsed analysis keys: {list(analysis.keys())}")
+        if "matched_categories" in analysis:
+            print(f"[CLAUDE DEBUG] Number of matched categories: {len(analysis['matched_categories'])}")
+        if "symptom_clusters" in analysis:
+            print(f"[CLAUDE DEBUG] Has old symptom_clusters format with {len(analysis['symptom_clusters'])} items")
         
         # If old format returned, convert to new format (fallback compatibility)
         if "symptom_clusters" in analysis and "matched_categories" not in analysis:

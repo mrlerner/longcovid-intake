@@ -318,6 +318,8 @@ def analyze_symptoms():
 
         print(f"[DEBUG] Analyzing transcriptions: {transcriptions}")
         print(f"[DEBUG] API Key present: {bool(Config.CLAUDE_API_KEY)}")
+        print(f"[DEBUG] Number of symptom categories: {len(Config.SYMPTOM_CATEGORIES)}")
+        print(f"[DEBUG] First category: {Config.SYMPTOM_CATEGORIES[0] if Config.SYMPTOM_CATEGORIES else 'NONE'}")
 
         analysis = analyze_symptoms(
             transcriptions,
