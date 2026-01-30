@@ -271,6 +271,10 @@ body {
     border-radius: 12px;
 }
 
+.camera-ready {
+    margin-bottom: 1.5rem;
+}
+
 .success-message, .error-message {
     display: flex;
     align-items: center;
@@ -292,6 +296,21 @@ body {
 .question-container {
     max-width: 700px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure controls appear above video */
+.question-container .controls {
+    order: 1;
+}
+
+.question-container .video-container {
+    order: 2;
+}
+
+.question-container .question-display {
+    order: 0;
 }
 
 /* Progress Bar */
@@ -429,6 +448,7 @@ body {
 /* Controls */
 .controls {
     text-align: center;
+    margin-bottom: 1.5rem;
 }
 
 .control-group {

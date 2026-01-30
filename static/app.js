@@ -177,7 +177,9 @@ function updateQuestionDisplay() {
 
     // Update progress
     const progress = ((state.currentQuestion - 1) / state.totalQuestions) * 100;
-    elements.progressFill.style.width = `${progress}%`;
+    if (elements.progressFill) {
+        elements.progressFill.style.width = `${progress}%`;
+    }
 
     // Update step indicators
     elements.steps.forEach(step => {
