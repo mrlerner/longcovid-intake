@@ -1,11 +1,13 @@
 # Nixpacks configuration for Railway
-[phases.setup]
-nixPkgs = ["ffmpeg"]
+# See: https://nixpacks.com/docs/configuration/file
 
-[phases.install]
-cmds = ["pip install -r requirements.txt"]
+providers = ["python"]
+
+[phases.setup]
+nixPkgs = ["...", "ffmpeg"]
 
 [phases.build]
+dependsOn = ["install"]
 cmds = ["python -c \"import whisper; whisper.load_model('base')\""]
 
 [start]
