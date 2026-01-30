@@ -1,59 +1,68 @@
 """
-Transcription service using OpenAI Whisper.
-Transcribes audio files to text locally.
+Transcription service using Anthropic's Audio API.
+Transcribes audio files to text using Claude.
 """
 
 import os
-import ssl
-
-# Workaround for SSL certificate issues when downloading model
-ssl._create_default_https_context = ssl._create_unverified_context
-
-import whisper
-
-# Load model once at module level (lazy loading)
-_model = None
+import base64
+import anthropic
 
 
-def get_model():
-    """Get or load the Whisper model."""
-    global _model
-    if _model is None:
-        # Use 'base' model for good balance of speed and accuracy
-        # Options: tiny, base, small, medium, large
-        _model = whisper.load_model("base")
-    return _model
-
-
-def transcribe_audio(audio_path: str, api_key: str = None, model: str = None) -> str:
+def transcribe_audio(audio_path: str, api_key: str, model: str = "claude-sonnet-4-20250514") -> str:
     """
-    Transcribe an audio file using Whisper.
+    Transcribe an audio file using Anthropic's Audio API.
 
     Args:
         audio_path: Path to the audio file (WAV)
-        api_key: Not used (kept for API compatibility)
-        model: Not used (kept for API compatibility)
+        api_key: Anthropic API key
+        model: Claude model to use
 
     Returns:
         Transcription text
     """
     if not os.path.exists(audio_path):
         raise FileNotFoundError(f"Audio file not found: {audio_path}")
+    
+    if not api_key:
+        raise ValueError("API key is required for transcription")
 
-    # Load model
-    whisper_model = get_model()
+    # Create Anthropic client
+    client = anthropic.Anthropic(api_key=api_key)
 
-    # Transcribe
-    result = whisper_model.transcribe(
-        audio_path,
-        language="en",  # Assume English for medical intake
-        fp16=False  # Use FP32 for better compatibility
+    # Read and encode audio file to base64
+    with open(audio_path, 'rb') as audio_file:
+        audio_data = base64.standard_b64encode(audio_file.read()).decode('utf-8')
+
+    print(f"[TRANSCRIPTION DEBUG] Audio file: {audio_path}")
+    print(f"[TRANSCRIPTION DEBUG] File size: {os.path.getsize(audio_path)} bytes")
+
+    # Transcribe using Claude's document/audio API
+    message = client.messages.create(
+        model=model,
+        max_tokens=1024,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "document",
+                        "source": {
+                            "type": "base64",
+                            "media_type": "audio/wav",
+                            "data": audio_data
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": "Please transcribe this audio recording. Provide only the transcription text, nothing else."
+                    }
+                ]
+            }
+        ]
     )
 
-    transcription = result["text"].strip()
-    print(f"[WHISPER DEBUG] Audio file: {audio_path}")
-    print(f"[WHISPER DEBUG] File size: {os.path.getsize(audio_path)} bytes")
-    print(f"[WHISPER DEBUG] Raw transcription: '{transcription}'")
-    print(f"[WHISPER DEBUG] Transcription length: {len(transcription)}")
+    transcription = message.content[0].text.strip()
+    print(f"[TRANSCRIPTION DEBUG] Raw transcription: '{transcription}'")
+    print(f"[TRANSCRIPTION DEBUG] Transcription length: {len(transcription)}")
     
     return transcription

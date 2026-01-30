@@ -478,30 +478,17 @@ function updateAnalysisDisplay(analysis, isError = false) {
 
     let analysisHtml = '';
 
-    // Matched symptom categories (NEW FORMAT)
+    // Matched symptom category (show only first one)
     if (analysis.matched_categories && analysis.matched_categories.length > 0) {
-        analysisHtml += '<div class="analysis-section"><h4>Your Symptom Categories</h4>';
-        for (const match of analysis.matched_categories) {
-            const confidenceBadge = match.confidence === 'high' ? '🟢' : match.confidence === 'medium' ? '🟡' : '🟠';
-            analysisHtml += `
-                <div class="symptom-category-match" style="margin-bottom: 16px; padding: 16px; background: #f5f5f5; border-radius: 8px; border-left: 4px solid #2563eb;">
-                    <h5 style="margin: 0 0 8px 0; font-size: 16px;">${confidenceBadge} ${match.category_name}</h5>
-                    <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Your symptoms:</strong> ${match.patient_symptoms.join(', ')}</p>
-                    ${match.severity_indicators && match.severity_indicators.length > 0 ? 
-                        `<p style="margin: 0; font-size: 13px; color: #666; font-style: italic;">"${match.severity_indicators[0]}"</p>` : ''}
-                </div>
-            `;
-        }
+        analysisHtml += '<div class="analysis-section">';
+        const match = analysis.matched_categories[0]; // Only show first category
+        const confidenceBadge = match.confidence === 'high' ? '🟢' : match.confidence === 'medium' ? '🟡' : '🟠';
+        analysisHtml += `
+            <div class="symptom-category-match" style="margin-bottom: 16px; padding: 16px; background: #f5f5f5; border-radius: 8px; border-left: 4px solid #2563eb;">
+                <h5 style="margin: 0; font-size: 16px;">${confidenceBadge} ${match.category_name}</h5>
+            </div>
+        `;
         analysisHtml += '</div>';
-    }
-
-    // Priority concerns
-    if (analysis.priority_concerns && analysis.priority_concerns.length > 0) {
-        analysisHtml += '<div class="analysis-section"><h4>Your Top Concerns</h4><ul style="margin: 0; padding-left: 20px;">';
-        for (const concern of analysis.priority_concerns) {
-            analysisHtml += `<li style="margin-bottom: 8px;">${concern}</li>`;
-        }
-        analysisHtml += '</ul></div>';
     }
 
     // Clinical notes
