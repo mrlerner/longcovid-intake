@@ -515,15 +515,13 @@ function updateAnalysisDisplay(analysis, isError = false) {
 
     // Matched symptom category (show only first one)
     if (analysis.matched_categories && analysis.matched_categories.length > 0) {
-        analysisHtml += '<div class="analysis-section">';
         const match = analysis.matched_categories[0]; // Only show first category
-        const confidenceBadge = match.confidence === 'high' ? '🟢' : match.confidence === 'medium' ? '🟡' : '🟠';
         analysisHtml += `
-            <div class="symptom-category-match" style="margin-bottom: 16px; padding: 16px; background: #f5f5f5; border-radius: 8px; border-left: 4px solid #2563eb;">
-                <h5 style="margin: 0; font-size: 16px;">${confidenceBadge} ${match.category_name}</h5>
+            <div class="symptom-category-card">
+                <div class="category-label">Symptom Category</div>
+                <div class="category-name">${match.category_name}</div>
             </div>
         `;
-        analysisHtml += '</div>';
     }
 
     // Clinical notes

@@ -400,7 +400,7 @@ body {
 
 /* Question Display */
 .question-display {
-    text-align: left;
+    text-align: center;
     margin-bottom: 2rem;
 }
 
@@ -425,7 +425,7 @@ body {
     font-size: 1.125rem;
     color: var(--gray-700);
     max-width: 600px;
-    margin: 0;
+    margin: 0 auto;
     line-height: 1.7;
 }
 
@@ -507,7 +507,7 @@ body {
 
 /* Controls */
 .controls {
-    text-align: left;
+    text-align: center;
     margin-bottom: 1.5rem;
 }
 
@@ -516,7 +516,6 @@ body {
     background: var(--gray-50);
     border-radius: 8px;
     border: 1px solid var(--gray-200);
-    text-align: center;
 }
 
 .tip {
@@ -524,7 +523,6 @@ body {
     margin-bottom: 1.25rem;
     font-size: 1rem;
     line-height: 1.6;
-    text-align: left;
 }
 
 .tip.recording-tip {
@@ -722,6 +720,31 @@ body {
 .analysis-section p {
     color: var(--gray-600);
     margin-bottom: 0.25rem;
+}
+
+/* Symptom Category Card - Primary feature of results page */
+.symptom-category-card {
+    background: var(--primary);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.symptom-category-card .category-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+}
+
+.symptom-category-card .category-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
 }
 
 .next-steps {
