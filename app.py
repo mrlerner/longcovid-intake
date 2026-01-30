@@ -77,6 +77,12 @@ def create_session(test_mode=False):
 
 
 # Routes
+@app.route('/health')
+def health_check():
+    """Health check endpoint for Railway."""
+    return jsonify({'status': 'healthy', 'whisper_loaded': True}), 200
+
+
 @app.route('/')
 def index():
     """Main intake page."""

@@ -25,7 +25,7 @@ class Config:
         {
             "id": 2,
             "title": "Timeline",
-            "text": "How long have you had these symptoms, and are they getting worse, improving, or staying about the same?",
+            "text": "How long have you had these symptoms? Are they getting worse, improving, or staying about the same?",
             "suggested_duration": 45
         },
         {
