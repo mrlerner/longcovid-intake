@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ clinic_name }} - Video Intake</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 8v8l6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>{{ clinic_name }}</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Welcome Screen -->
+            <section id="welcome-screen" class="screen active">
+                <div class="welcome-content">
+                    <h1>Welcome to Your Video Intake</h1>
+                    <p class="subtitle">Before your appointment, we'd like to learn more about how you're feeling. This helps us prepare for your visit and ensures we focus on what matters most to you.</p>
+
+                    <div class="info-box">
+                        <h3>What to expect:</h3>
+                        <ul>
+                            {% if test_mode %}
+                            <li>You'll answer <strong>1 short question</strong> on video (test mode)</li>
+                            {% else %}
+                            <li>You'll answer <strong>3 short questions</strong> on video</li>
+                            {% endif %}
+                            <li>Each response should be about <strong>1-2 minutes</strong></li>
+                            <li>You can <strong>re-record</strong> any answer if needed</li>
+                            <li>Your responses will be transcribed and analyzed to help our team</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box warning">
+                        <h3>Before you begin:</h3>
+                        <ul>
+                            <li>Find a <strong>quiet, private space</strong></li>
+                            <li>Make sure your <strong>camera and microphone</strong> are working</li>
+                            <li>You'll need to <strong>allow camera access</strong> when prompted</li>
+                        </ul>
+                    </div>
+
+                    <button id="begin-btn" class="btn btn-primary btn-large">
+                        Begin Intake
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10h12M12 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Camera Setup Screen -->
+            <section id="camera-screen" class="screen">
+                <div class="camera-setup">
+                    <h2>Camera Setup</h2>
+                    <p>Please allow access to your camera and microphone when prompted.</p>
+
+                    <div class="video-container setup">
+                        <video id="setup-preview" autoplay muted playsinline></video>
+                        <div class="video-overlay" id="camera-status">
+                            <div class="spinner"></div>
+                            <span>Requesting camera access...</span>
+                        </div>
+                    </div>
+
+                    <div id="camera-ready" class="camera-ready hidden">
+                        <p class="success-message">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Camera and microphone ready!
+                        </p>
+                        <button id="start-questions-btn" class="btn btn-primary">
+                            Start Questions
+                        </button>
+                    </div>
+
+                    <div id="camera-error" class="camera-error hidden">
+                        <p class="error-message">Unable to access camera. Please check your browser permissions.</p>
+                        <button id="retry-camera-btn" class="btn btn-secondary">Try Again</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Question Screen -->
+            <section id="question-screen" class="screen">
+                <div class="question-container">
+                    <!-- Progress -->
+                    <div class="progress-bar">
+                        <div class="progress-steps">
+                            <div class="step" data-step="1"><span>1</span></div>
+                            {% if not test_mode %}
+                            <div class="step" data-step="2"><span>2</span></div>
+                            <div class="step" data-step="3"><span>3</span></div>
+                            {% endif %}
+                        </div>
+                        <div class="progress-line">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Display -->
+                    <div class="question-display">
+                        <div class="question-number">Question <span id="current-question-num">1</span> of <span id="total-questions">{% if test_mode %}1{% else %}3{% endif %}</span></div>
+                        <h2 id="question-title" class="question-title">Your Main Concerns</h2>
+                        <p id="question-text" class="question-text">What are the top three things you'd most like help with right now?</p>
+                    </div>
+
+                    <!-- Video Area -->
+                    <div class="video-container recording">
+                        <video id="recording-preview" autoplay muted playsinline></video>
+                        <video id="playback-video" playsinline class="hidden"></video>
+
+                        <!-- Recording indicator -->
+                        <div id="recording-indicator" class="recording-indicator hidden">
+                            <span class="rec-dot"></span>
+                            <span class="rec-text">REC</span>
+                            <span id="recording-timer" class="rec-timer">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="controls">
+                        <div id="pre-record-controls" class="control-group">
+                            <p class="tip">When you're ready, click the button below to start recording your answer.</p>
+                            <button id="start-recording-btn" class="btn btn-record">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" fill="currentColor"/>
+                                </svg>
+                                Start Recording
+                            </button>
+                        </div>
+
+                        <div id="recording-controls" class="control-group hidden">
+                            <p class="tip recording-tip">Speak clearly and take your time. Click stop when you're finished.</p>
+                            <button id="stop-recording-btn" class="btn btn-stop">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect x="6" y="6" width="12" height="12" fill="currentColor"/>
+                                </svg>
+                                Stop Recording
+                            </button>
+                        </div>
+
+                        <div id="post-record-controls" class="control-group hidden">
+                            <p class="tip">Review your answer. You can re-record or continue to the next question.</p>
+                            <div class="button-group">
+                                <button id="rerecord-btn" class="btn btn-secondary">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M3 10a7 7 0 1 1 1.5 4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M3 14V10h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Re-record
+                                </button>
+                                <button id="continue-btn" class="btn btn-primary">
+                                    Continue
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M4 10h12M12 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Processing Screen -->
+            <section id="processing-screen" class="screen">
+                <div class="processing-content">
+                    <h2>Processing Your Responses</h2>
+                    <p>Please wait while we transcribe and analyze your video responses...</p>
+
+                    <div class="processing-steps">
+                        <div class="processing-step" id="step-transcribe-1">
+                            <div class="step-icon">
+                                <div class="spinner small"></div>
+                            </div>
+                            <span>Transcribing Question 1...</span>
+                        </div>
+                        {% if not test_mode %}
+                        <div class="processing-step" id="step-transcribe-2">
+                            <div class="step-icon pending">
+                                <span class="step-number">2</span>
+                            </div>
+                            <span>Transcribing Question 2</span>
+                        </div>
+                        <div class="processing-step" id="step-transcribe-3">
+                            <div class="step-icon pending">
+                                <span class="step-number">3</span>
+                            </div>
+                            <span>Transcribing Question 3</span>
+                        </div>
+                        {% endif %}
+                        <div class="processing-step" id="step-analyze">
+                            <div class="step-icon pending">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M10 2v4M10 14v4M2 10h4M14 10h4M4.93 4.93l2.83 2.83M12.24 12.24l2.83 2.83M4.93 15.07l2.83-2.83M12.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <span>Analyzing symptoms</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Screen -->
+            <section id="complete-screen" class="screen">
+                <div class="complete-content">
+                    <div class="success-icon">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3"/>
+                            <path d="M20 32l8 8 16-16" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h2>Thank You!</h2>
+                    <p class="subtitle">Your video intake has been completed successfully.</p>
+
+                    <div class="summary-section">
+                        <h3>Your Responses Summary</h3>
+                        <div id="transcriptions-summary" class="transcriptions-summary">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <h3>Symptom Analysis</h3>
+                        <div id="analysis-summary" class="analysis-summary">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="next-steps">
+                        <h3>What's Next?</h3>
+                        <p>Our clinical team will review your responses before your appointment. This information helps us prepare to address your specific concerns.</p>
+                        <p>If you have any questions, please contact our clinic.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Store questions data and test mode -->
+    <script>
+        window.QUESTIONS = {{ questions | tojson | safe }};
+        window.TEST_MODE = {{ 'true' if test_mode else 'false' }};
+    </script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
