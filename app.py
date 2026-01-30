@@ -12,26 +12,8 @@ app.secret_key = Config.SECRET_KEY
 # Ensure upload folder exists
 os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
 
-# Preload Whisper model at startup to avoid timeout on first request
-def preload_whisper():
-    """Preload Whisper model to avoid cold start delays."""
-    try:
-        print("[STARTUP] Preloading Whisper model...")
-        import sys
-        sys.stdout.flush()
-        from services.transcription import get_model
-        get_model("base")
-        print("[STARTUP] Whisper model loaded successfully")
-        sys.stdout.flush()
-        return True
-    except Exception as e:
-        print(f"[STARTUP] Warning: Could not preload Whisper: {e}")
-        import sys
-        sys.stdout.flush()
-        return False
-
-# Only preload if this is the main module or being run with gunicorn --preload
-whisper_loaded = preload_whisper()
+# Whisper model will be loaded lazily on first transcription request
+whisper_loaded = False
 
 # In-memory session storage (in production: use Redis or database)
 patient_sessions = {}

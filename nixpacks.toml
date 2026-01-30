@@ -11,5 +11,5 @@ dependsOn = ["install"]
 cmds = ["python -c \"from faster_whisper import WhisperModel; WhisperModel('base', device='cpu', compute_type='int8')\""]
 
 [start]
-cmd = "gunicorn app:app --timeout 300 --workers 1 --bind 0.0.0.0:$PORT --preload"
+cmd = "gunicorn app:app --timeout 300 --workers 1 --bind 0.0.0.0:$PORT"
 # Force rebuild Thu Jan 29 21:30:58 PST 2026
