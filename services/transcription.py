@@ -1,14 +1,10 @@
 """
-Transcription service using OpenAI Whisper.
-Transcribes audio files to text.
+Transcription service using faster-whisper.
+Uses CTranslate2 for 4x faster inference with 4x less memory than OpenAI Whisper.
 """
 
 import os
-import whisper
-
-# Set Whisper cache directory to persist across builds
-# This prevents re-downloading the model on each deploy
-os.environ.setdefault("XDG_CACHE_HOME", "/app/.cache")
+from faster_whisper import WhisperModel
 
 # Load model once at module level for efficiency
 _model = None
@@ -17,16 +13,16 @@ def get_model(model_name: str = "base"):
     """Get or load the Whisper model."""
     global _model
     if _model is None:
-        print(f"[TRANSCRIPTION] Loading Whisper model: {model_name}")
-        print(f"[TRANSCRIPTION] Cache dir: {os.environ.get('XDG_CACHE_HOME', 'default')}")
-        _model = whisper.load_model(model_name)
+        print(f"[TRANSCRIPTION] Loading faster-whisper model: {model_name}")
+        # Use int8 quantization on CPU for best memory efficiency
+        _model = WhisperModel(model_name, device="cpu", compute_type="int8")
         print(f"[TRANSCRIPTION] Model loaded successfully")
     return _model
 
 
 def transcribe_audio(audio_path: str, api_key: str = None, model: str = None) -> str:
     """
-    Transcribe an audio file using OpenAI Whisper (local).
+    Transcribe an audio file using faster-whisper (local).
 
     Args:
         audio_path: Path to the audio file (WAV)
@@ -45,8 +41,10 @@ def transcribe_audio(audio_path: str, api_key: str = None, model: str = None) ->
     # Load model and transcribe
     whisper_model = get_model("base")
 
-    result = whisper_model.transcribe(audio_path)
-    transcription = result["text"].strip()
+    segments, info = whisper_model.transcribe(audio_path, beam_size=5)
+
+    # Collect all segment texts
+    transcription = " ".join(segment.text for segment in segments).strip()
 
     print(f"[TRANSCRIPTION DEBUG] Raw transcription: '{transcription}'")
     print(f"[TRANSCRIPTION DEBUG] Transcription length: {len(transcription)}")

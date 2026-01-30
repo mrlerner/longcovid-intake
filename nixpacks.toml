@@ -8,7 +8,7 @@ nixPkgs = ["...", "ffmpeg"]
 
 [phases.build]
 dependsOn = ["install"]
-cmds = ["python -c \"import whisper; whisper.load_model('base')\""]
+cmds = ["python -c \"from faster_whisper import WhisperModel; WhisperModel('base', device='cpu', compute_type='int8')\""]
 
 [start]
 cmd = "gunicorn app:app --timeout 300 --workers 1 --bind 0.0.0.0:$PORT --preload"
